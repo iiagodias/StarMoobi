@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import Inicio from './screens/Inicio';
 import { createStackNavigator, createAppContainer  } from 'react-navigation';
+import Inicio from './screens/Inicio';
 
-const StackNivagator = createStackNavigator({
+
+const StackNavigator = createStackNavigator({
     Inicio: {
       screen: Inicio,
       navigationOptions:{
@@ -12,6 +13,6 @@ const StackNivagator = createStackNavigator({
     }
 });
 
-const Route = createAppContainer(StackNivagator);
+const Route = createAppContainer(StackNavigator);
 
 export default Route;
