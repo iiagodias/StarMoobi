@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, TextInput } from 'react-native';
+import { Platform, Text, View, TextInput, Alert, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
+import RenderItem from '../../components/RenderItem';
 
 class Inicio extends Component {
 
     state = {
-        txtNome: ""
+        txtNome: "",
+        data: []
     }
 
     async buscar(nome){
-        await fetch(`https://swapi.co/api/people/?search=${nome}`).then(function(response){
-             response.text().then(function(result){ 
-               result = JSON.parse(result);
-               if(result.count === 0){
-                   alert("Erro", "Nenhum personagem encontrado!");
-               }else{
-                   alert(JSON.stringify(result.results));
-               }
+        fetch(`https://swapi.co/api/people/?search=${nome}`).then((response) => {
+             response.json().then((result) => { 
+                this.setState({data: result});
              });
         }).catch(function(error){
-            
+            Alert.alert("Erro", "Erro na conexão.");
         });
     }
+    
+
+
 
     render(){
         return(
@@ -39,6 +39,15 @@ class Inicio extends Component {
                          onSubmitEditing={() => this.buscar(this.state.txtNome)} />
                     </View>
                 </View>
+                <FlatList
+                  data={this.state.data.results}
+                  keyExtractor={item => item.name}
+                  renderItem={({ item }) => (
+                    <RenderItem
+                     name={item.name}
+                    />
+                  )}
+                />
             </View>
         );
     }
