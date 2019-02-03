@@ -5,6 +5,7 @@ import styles from './styles';
 import RenderItem from '../../components/RenderItem';
 import { Tab, Tabs } from 'native-base';
 import ItemTab from '../../components/ItemTabs';
+import ModalDetalhes from '../../components/ModalDetalhes';
 
 class Detalhe extends Component {
 
@@ -14,6 +15,9 @@ class Detalhe extends Component {
         films: [],
         vehicles: [],
         starships: [],
+        visibleModal: false,
+        item: [],
+        tipo: ""
 
     }
 
@@ -77,9 +81,18 @@ class Detalhe extends Component {
         
     }
 
+    modalDetalhes(visible, item, tipo){
+        this.setState({visibleModal: visible, item: item, tipo: tipo});
+    }
+
+    fecharModal(){
+        this.setState({visibleModal: false});
+    }
+
     render(){
         return(
             <View style={styles.container}>
+              <ModalDetalhes visible={this.state.visibleModal} item={this.state.item} onClose={() => this.fecharModal()} tipo={this.state.tipo}  />
               <View style={styles.header}>
                 <View style={styles.boxTitulo}>
                     <Icon name="user-astronaut" size={18} color="#999" /><Text style={styles.titulo}>Name: {this.state.data.name}</Text>
@@ -124,7 +137,7 @@ class Detalhe extends Component {
                     <View style={styles.corpoTab}>
                         <ScrollView contentContainerStyle={styles.scrollTab}>
                             {this.state.films.map((item) =>
-                                <ItemTab name={item.title} onPress={() => {}} key={item.title} icon="film" />
+                                <ItemTab name={item.title} onPress={() => this.modalDetalhes(true, item, "Films")} key={item.title} icon="film" />
                             )}
                         </ScrollView>
                     </View>
@@ -135,7 +148,7 @@ class Detalhe extends Component {
                     <View style={styles.corpoTab}>
                         <ScrollView contentContainerStyle={styles.scrollTab}>
                             {this.state.vehicles.map((item) =>
-                                <ItemTab name={item.name} onPress={() => {}} key={item.name} icon="car" />
+                                <ItemTab name={item.name} onPress={() => this.modalDetalhes(true, item, "Vehicles")} key={item.name} icon="car" />
                             )}
                         </ScrollView>
                     </View>
@@ -146,7 +159,7 @@ class Detalhe extends Component {
                     <View style={styles.corpoTab}>
                         <ScrollView contentContainerStyle={styles.scrollTab}>
                             {this.state.starships.map((item) =>
-                                <ItemTab name={item.name} onPress={() => {}} key={item.name} icon="space-shuttle" />
+                                <ItemTab name={item.name} onPress={() => this.modalDetalhes(true, item, "Starships")} key={item.name} icon="space-shuttle" />
                             )}
                         </ScrollView>
                     </View>

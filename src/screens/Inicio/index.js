@@ -35,7 +35,7 @@ class Inicio extends Component {
                     <View style={styles.boxInput}>
                         <Icon name="search" size={18} color="#999" />
                         <TextInput 
-                         placeholder="Buscar"
+                         placeholder="Search"
                          returnKeyType="search"
                          style={styles.inputBuscar}
                          onChangeText={(txtNome) => this.setState({txtNome})}
