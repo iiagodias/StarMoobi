@@ -15,7 +15,7 @@ const StackNavigator = createStackNavigator({
     Detalhe: {
       screen: Detalhe,
       navigationOptions:{
-        header: null
+        headerTitle: "Detalhes"
       }
     }
 });

@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, TextInput, Alert, TouchableOpacity } from 'react-native';
+import { Platform, Text, View, TextInput, Alert, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import RenderItem from '../../components/RenderItem';
 import { Tab, Tabs } from 'native-base';
+import ItemTab from '../../components/ItemTabs';
 
 class Detalhe extends Component {
 
     state ={
         data: [],
         homeworld: "",
-        films: []
+        films: [],
+        vehicles: [],
+        starships: [],
+
     }
 
     async buscarFilms(){
@@ -24,9 +28,37 @@ class Detalhe extends Component {
             });
 
         });
-
-        
+  
     }
+
+    async buscarVehicles(){
+        await this.state.data.vehicles.forEach(item => {
+            fetch(item).then((response) =>{
+                response.json().then((result) =>{
+                    this.setState({vehicles: [...this.state.vehicles, result]});
+                });
+            }).catch((erro)=>{
+                Alert.alert("Erro", "Erro na conexão.");
+            });
+
+        });
+  
+    }
+
+    async buscarStarships(){
+        await this.state.data.starships.forEach(item => {
+            fetch(item).then((response) =>{
+                response.json().then((result) =>{
+                    this.setState({starships: [...this.state.starships, result]});
+                });
+            }).catch((erro)=>{
+                Alert.alert("Erro", "Erro na conexão.");
+            });
+
+        });
+  
+    }
+
 
     async componentDidMount(){
         const data = this.props.navigation.getParam('data', []);
@@ -39,7 +71,10 @@ class Detalhe extends Component {
             Alert.alert("Erro", "Erro na conexão.");
         });
 
-        this.buscarFilms();        
+        this.buscarFilms();  
+        this.buscarVehicles();     
+        this.buscarStarships();
+        
     }
 
     render(){
@@ -85,19 +120,37 @@ class Detalhe extends Component {
 
               <Tabs>
                 <Tab heading="Films" tabStyle={styles.tab} activeTabStyle={styles.tabActive}>
-                    <View>
 
+                    <View style={styles.corpoTab}>
+                        <ScrollView contentContainerStyle={styles.scrollTab}>
+                            {this.state.films.map((item) =>
+                                <ItemTab name={item.title} onPress={() => {}} key={item.title} icon="film" />
+                            )}
+                        </ScrollView>
                     </View>
+
                 </Tab>
                 <Tab heading="Vehicles" tabStyle={styles.tab} activeTabStyle={styles.tabActive}>
-                    <View>
-                        <Text>Teste</Text>
+
+                    <View style={styles.corpoTab}>
+                        <ScrollView contentContainerStyle={styles.scrollTab}>
+                            {this.state.vehicles.map((item) =>
+                                <ItemTab name={item.name} onPress={() => {}} key={item.name} icon="car" />
+                            )}
+                        </ScrollView>
                     </View>
+
                 </Tab>
                 <Tab heading="Starships" tabStyle={styles.tab} activeTabStyle={styles.tabActive}>
-                    <View>
-                        <Text>Teste</Text>
+
+                    <View style={styles.corpoTab}>
+                        <ScrollView contentContainerStyle={styles.scrollTab}>
+                            {this.state.starships.map((item) =>
+                                <ItemTab name={item.name} onPress={() => {}} key={item.name} icon="space-shuttle" />
+                            )}
+                        </ScrollView>
                     </View>
+
                 </Tab>
               </Tabs>
 

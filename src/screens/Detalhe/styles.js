@@ -22,6 +22,13 @@ const styles = StyleSheet.create({
   },
   boxTitulo:{
     flexDirection: "row"
+  },
+  corpoTab:{
+    flex: 1,
+    backgroundColor: "#4444",
+  },
+  scrollTab:{
+    alignItems: "center"
   }
 });
 
