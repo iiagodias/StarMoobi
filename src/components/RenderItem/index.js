@@ -8,7 +8,7 @@ export default class RenderItem extends Component {
         return(
             <View style={styles.contain}>
               <TouchableOpacity style={styles.boxItem} activeOpacity={0.5} onPress={this.props.onPress}>
-                <Icon name="user" size={18} color="#999" />
+                <Icon name="user-astronaut" size={18} color="#999" />
                 <Text style={styles.textNome}>{this.props.name}</Text>
               </TouchableOpacity>
             </View>

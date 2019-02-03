@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 export default class Loading extends Component {
      render(){
         return(
-              <Modal visible={this.props.visible} transparent>
+              <Modal visible={this.props.visible} onRequestClose = {() => {}} transparent>
                 <View style={styles.contain}>
                   <View style={styles.boxIndicador}>  
                      <ActivityIndicator size="small" color="#444" />
