@@ -11,6 +11,9 @@ export default class RenderItem extends Component {
                 <Icon name="user-astronaut" size={18} color="#999" />
                 <Text style={styles.textNome}>{this.props.name}</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.bntFavorito} onPress={this.props.onFavorito}>
+                <Icon name="gratipay" size={25} color="#e74c3c" />
+              </TouchableOpacity>
             </View>
             
         );

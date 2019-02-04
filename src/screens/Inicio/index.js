@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, TextInput, Alert, FlatList } from 'react-native';
+import { Platform, Text, View, TextInput, Alert, FlatList, AsyncStorage, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from './styles';
 import RenderItem from '../../components/RenderItem';
@@ -10,7 +10,8 @@ class Inicio extends Component {
     state = {
         txtNome: "",
         loading: false,
-        data: []
+        data: [],
+        dataFavorito: []
     }
 
     async buscar(nome){
@@ -24,6 +25,50 @@ class Inicio extends Component {
             this.setState({loading: false});
             Alert.alert("Erro", "Erro na conexão.");
         });
+
+    }
+
+    async getFavorito(){
+       await AsyncStorage.getItem('@StarMoobi:fav').then((data) =>{
+            this.setState({dataFavorito: JSON.parse(data)});
+       }).catch((error)=>{  
+            Alert.alert("Erro", "Erro na conexão.");
+       });
+
+    }
+
+    async favoritar(item){
+
+        AsyncStorage.getItem('@StarMoobi:fav').then((data) =>{
+            data = (data ? JSON.parse(data) : []);
+            if(data.length > 0){
+                const verifica = data.filter(obj => obj.name == item.name);
+                if(verifica.length > 0){
+                    Alert.alert("Aviso", "Você já favoritou esse personagem");
+                }else{
+                    data.push(item);
+                    AsyncStorage.setItem('@StarMoobi:fav', JSON.stringify(data));
+                }
+            }else{
+                data.push(item);
+                AsyncStorage.setItem('@StarMoobi:fav', JSON.stringify(data));
+            }
+            this.getFavorito();
+        }).catch((error)=>{  
+                Alert.alert("Erro", "Erro na conexão.");
+        });  
+
+    }
+
+    async removerFav(item){
+        const lista = this.state.dataFavorito.filter(obj => obj.name !== item.name);
+        await AsyncStorage.setItem('@StarMoobi:fav', JSON.stringify(lista));
+        this.setState({dataFavorito: lista});
+    }
+
+
+    async componentDidMount(){
+        this.getFavorito();
     }
     
 
@@ -50,9 +95,32 @@ class Inicio extends Component {
                     <RenderItem
                      name={item.name}
                      onPress={() => this.props.navigation.navigate('Detalhe', {data: item} )}
+                     onFavorito={() => this.favoritar(item)}
                     />
                   )}
                 />
+                <View style={styles.boxFavorito}>
+                    <View style={styles.boxTitulo}><Text>Favorite Characters</Text></View>
+                    <View></View>
+                    <ScrollView horizontal={true}>
+
+                        {this.state.dataFavorito.map((item) =>
+                           <View style={styles.boxFavDados} key={item.name}>
+                                <TouchableOpacity activeOpacity={0.5} style={styles.boxPerson}  onPress={() => this.props.navigation.navigate('Detalhe', {data: item} )}>
+                                <View style={styles.boxDadosFav}>
+                                    <Icon name="user-astronaut" size={20} color="#2980b9" />
+                                    <Text ellipsizeMode="tail" style={styles.txtNameFav}>{item.name}</Text>  
+                                </View>                         
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.bntDelete} onPress={() => this.removerFav(item)}>
+                                    <View style={styles.bntExcluir}><Text style={styles.txtRemover}>Remover</Text></View>
+                                </TouchableOpacity>
+                           </View>
+                        )}
+                        
+
+                    </ScrollView>
+                </View>
             </View>
         );
     }

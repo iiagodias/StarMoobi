@@ -3,18 +3,23 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     contain:{
-        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: "center"
     },
     boxItem:{
-        width: "90%",
+        width: "80%",
         padding: 5,
         backgroundColor: "#fff",
         borderRadius: 3,
-        marginTop: 10,
+        marginTop: 15,
         flexDirection: "row"
     },
     textNome:{
         marginLeft: 10
+    },
+    bntFavorito:{
+        marginLeft: 10,
+        marginTop: 17
     }
 });
 
